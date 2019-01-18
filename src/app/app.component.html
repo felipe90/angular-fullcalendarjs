@@ -1,20 +1,50 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+{{daysSelected | json}}
+<!-- {{this.form.controls['days'].value | json}}
+{{this.form.controls['startTime'].value | json}}
+{{this.form.controls['endTime'] |.value json}} -->
 
+<div class="scheduler-content">
+    <form class="scheduler-inputs" [formGroup]="form" (ngSubmit)="addNewDayEvents()">
+        <!--Days-->
+        <div class="form-group-inline">
+            <div class="label" for="days">Days</div>
+            <p-multiSelect [options]="daysDialogOptions" [showHeader]="false" defaultLabel=" " [scrollHeight]="'123px'"
+                id="days" formControlName="days"></p-multiSelect>
+        </div>
+        <!--Start Time-->
+        <div class="form-group-inline">
+            <div class="label" for="startTime">Start Time</div>
+            <p-dropdown [options]="timeDialogOptions" placeholder=" " optionLabel="label" id="startTime"
+                formControlName="startTime">
+                <ng-template let-time pTemplate="item">
+                    <div class="ui-helper-clearfix">
+                        <!-- <i class="fas fa-check"></i> -->
+                        <div>{{time.label}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <!--End Time-->
+        <div class="form-group-inline">
+            <div class="label" for="endTime">End Time</div>
+            <p-dropdown [options]="timeDialogOptions" placeholder=" " optionLabel="label" id="endTime" formControlName="endTime">
+                <ng-template let-time pTemplate="item">
+                    <div class="ui-helper-clearfix">
+                        <!-- <i class="fas fa-check"></i> -->
+                        <div>{{time.label}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <br>
+        <!--Actions-->
+        <div class="form-group-inline">
+            <!-- <i class="fas fa-plus accent action"></i> -->
+            <button pButton type="submit" class="primary" label="New Day-Time(s)" id="submit" ></button>
+        </div>
+    </form>
+    <hr class="separator">
+    <div class="scheduler-caledar">
+        <p-fullCalendar #calendar [events]="events" [options]="options"></p-fullCalendar>
+    </div>
+</div>
