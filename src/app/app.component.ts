@@ -75,7 +75,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   public timeDialogOptions: any[] = TIME_OPTIONS;
 
   public form: FormGroup;
-  public daysSelected = {};
+  public selectedDays = {};
   public events: any[];
   public options: any;
 
@@ -124,14 +124,15 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   public addNewDayEvents() {
 
-    const selectedDays = this.form.get('days').value;
+    const daysArray = this.form.get('days').value;
     const selectedStartTime = this.form.get('startTime').value;
     const selectedEndTime = this.form.get('endTime').value;
 
-    selectedDays.forEach((day: number) => {
+    daysArray.forEach((day: number) => {
       const startTime = new Date();
       const endTime = new Date();
 
+      // Set time to fix into date time schema
       startTime.setDate(this._getEquivalentSchedulerDate(startTime, day));
       endTime.setDate(this._getEquivalentSchedulerDate(endTime, day));
 
@@ -140,12 +141,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       endTime.setHours(selectedEndTime.value.hours);
       endTime.setMinutes(selectedEndTime.value.min);
 
+      // Update Scheduler and control field
       this._addNewEvent(startTime, endTime);
+      this.selectedDays[day] = true;
     });
 
-    console.log(selectedDays);
-    console.log(selectedStartTime);
-    console.log(selectedEndTime);
+    this.getRangesArray(this.events);
 
     this.form.reset();
   }
@@ -159,7 +160,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private _setDaysSelected(startDate: Date, endDate: Date) {
     if ((startDate.getDay() >= 0 && startDate.getDay() <= 6) && (endDate.getDay() >= 0 && endDate.getDay() <= 6)) {
       for (let index = startDate.getDay(); index <= endDate.getDay(); index++) {
-        this.daysSelected[index] = true;
+        this.selectedDays[index] = true;
       }
     }
   }
@@ -174,17 +175,14 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   public getRangesArray(events: any[]): any {
     // TODO. fix it to BE Model
-    const scheduler: any = {};
-
-    const rangesArray = events.map((event: any) => {
-      return {
-        lovDayOfWeekID: event.start.getDay(),
-        lowValue: event.start,
-        highValue: event.end
-      };
+    const scheduler: any = Object.assign({}, this.selectedDays);
+    Object.keys(scheduler).forEach((key) => {
+      scheduler[key] = [];
     });
 
-    console.log(rangesArray);
+    const rangesArray = events.map((event: any) => {
+      return { lovDayOfWeekID: event.start.getDay(), lowValue: event.start, highValue: event.end };
+    });
 
     rangesArray.forEach((item) => {
       scheduler[item.lovDayOfWeekID].push({
