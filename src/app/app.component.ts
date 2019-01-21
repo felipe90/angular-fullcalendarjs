@@ -23,6 +23,9 @@ const DAYS_OPTIONS: any[] = [
   { label: 'Thursday', value: 4 },
   { label: 'Friday', value: 5 },
   { label: 'Saturday', value: 6 },
+  { label: 'Satu', value: 6 },
+  { label: 'Saturday', value: 6 },
+  { label: 'Saturday', value: 6 },
 ];
 
 const TIME_OPTIONS: any[] = [
@@ -87,8 +90,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.events = [];
 
     this.options = {
-      minTime: '8:00:00',
-      maxTime: '18:00:00',
+      minTime: '00:00:00',
+      maxTime: '24:00:00',
       allDaySlot: false,
       defaultView: 'agendaWeek',
       header: false,
@@ -107,9 +110,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         // this._addNewEvent(startDate, endDate);
 
-        const distanceBetween = ((startDate.getDay() - endDate.getDay()) * -1 ) + 1 ;
+        const distanceBetween = ((startDate.getDay() - endDate.getDay()) * -1) + 1;
 
-        const day = new Date();
+        const day = startDate;
+        let dayTopTime = new Date(startDate);
+        dayTopTime.setHours(24);
+
         const nextDay = new Date();
 
         if (distanceBetween === 1) {
@@ -120,16 +126,21 @@ export class AppComponent implements OnInit, AfterViewInit {
           console.log(distanceBetween);
 
           for (let i = 0; i < distanceBetween; i++) {
-            day.setDate(startDate.getDate() + i);
 
             // this._addNewEvent(startDate, k)
 
-            if (endDate.getDate() <= day.getDate()) {
-              console.log(day);
-            }
+            // if (endDate.getDate() <= day.getDate()) {
+            //   console.log(day);
+            // }
 
-            nextDay.setDate(day.getDate() + 1);
+            // nextDay.setDate(day.getDate() + 1);
 
+            day.setDate(startDate.getDate() + i);
+            dayTopTime = new Date(day);
+            dayTopTime.setHours(24);
+
+            console.log(day);
+            console.log(dayTopTime);
           }
         }
 
