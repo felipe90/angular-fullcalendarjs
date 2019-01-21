@@ -105,7 +105,36 @@ export class AppComponent implements OnInit, AfterViewInit {
         const startDate = new Date(res.start);
         const endDate = new Date(res.end);
 
-        this._addNewEvent(startDate, endDate);
+        // this._addNewEvent(startDate, endDate);
+
+        const distanceBetween = ((startDate.getDay() - endDate.getDay()) * -1 ) + 1 ;
+
+        const day = new Date();
+        const nextDay = new Date();
+
+        if (distanceBetween === 1) {
+          // Same days selected
+          this._addNewEvent(startDate, endDate);
+        } else {
+          // Different days selected
+          console.log(distanceBetween);
+
+          for (let i = 0; i < distanceBetween; i++) {
+            day.setDate(startDate.getDate() + i);
+
+            // this._addNewEvent(startDate, k)
+
+            if (endDate.getDate() <= day.getDate()) {
+              console.log(day);
+            }
+
+            nextDay.setDate(day.getDate() + 1);
+
+          }
+        }
+
+
+
         this._setDaysSelected(startDate, endDate);
       }
     };
