@@ -146,9 +146,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.form = this._formBuilder.group(this._dayTimeForm);
   }
 
-  ngAfterViewInit(): void {
-    // console.log(this.calendarRef.getCalendar());
-  }
+  ngAfterViewInit(): void { }
 
   public addNewDayEventsByForm(): void {
     const selectedDaysOptions = this.form.get('days').value;
