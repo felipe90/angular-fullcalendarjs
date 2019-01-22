@@ -1,8 +1,3 @@
-<!-- {{selectedDays | json}} -->
-{{this.form.controls['days'].value | json}}
-<!-- {{this.form.controls['startTime'].value | json}}
-{{this.form.controls['endTime'] |.value json}} -->
-
 <div class="scheduler-content">
     <form class="scheduler-inputs" [formGroup]="form" (ngSubmit)="addNewDayEventsByForm()">
         <!--Days-->

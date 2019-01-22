@@ -29,8 +29,22 @@ const DAYS_OPTIONS: any[] = [
 ];
 
 const TIME_OPTIONS: any[] = [
-  { label: '8:00 am', value: { hours: 8, min: 0 } },
-  { label: '8:30 am', value: { hours: 8, min: 30 } },
+  { label: '0:00 am', value: { hours: 0, min: 0 } },
+  { label: '0:30 am', value: { hours: 0, min: 30 } },
+  { label: '1:00 am', value: { hours: 1, min: 0 } },
+  { label: '1:30 am', value: { hours: 1, min: 30 } },
+  { label: '2:00 am', value: { hours: 2, min: 0 } },
+  { label: '2:30 am', value: { hours: 2, min: 30 } },
+  { label: '3:00 am', value: { hours: 3, min: 0 } },
+  { label: '3:30 am', value: { hours: 3, min: 30 } },
+  { label: '4:00 am', value: { hours: 4, min: 0 } },
+  { label: '4:30 am', value: { hours: 4, min: 30 } },
+  { label: '5:00 am', value: { hours: 5, min: 0 } },
+  { label: '5:30 am', value: { hours: 5, min: 30 } },
+  { label: '6:00 am', value: { hours: 6, min: 0 } },
+  { label: '6:30 am', value: { hours: 6, min: 30 } },
+  { label: '7:00 am', value: { hours: 7, min: 0 } },
+  { label: '7:30 am', value: { hours: 7, min: 30 } },
   { label: '9:00 am', value: { hours: 9, min: 0 } },
   { label: '9:30 am', value: { hours: 9, min: 30 } },
   { label: '10:00 am', value: { hours: 10, min: 0 } },
@@ -50,6 +64,18 @@ const TIME_OPTIONS: any[] = [
   { label: '5:00 pm', value: { hours: 17, min: 0 } },
   { label: '5:30 pm', value: { hours: 17, min: 30 } },
   { label: '6:00 pm', value: { hours: 18, min: 0 } },
+  { label: '6:30 pm', value: { hours: 18, min: 30 } },
+  { label: '7:00 pm', value: { hours: 19, min: 0 } },
+  { label: '7:30 pm', value: { hours: 19, min: 30 } },
+  { label: '8:00 pm', value: { hours: 20, min: 0 } },
+  { label: '8:30 pm', value: { hours: 20, min: 30 } },
+  { label: '9:00 pm', value: { hours: 21, min: 0 } },
+  { label: '9:30 pm', value: { hours: 21, min: 30 } },
+  { label: '10:00 pm', value: { hours: 22, min: 0 } },
+  { label: '10:30 pm', value: { hours: 22, min: 30 } },
+  { label: '11:00 pm', value: { hours: 23, min: 0 } },
+  { label: '11:30 pm', value: { hours: 23, min: 30 } },
+  { label: '12:00 pm', value: { hours: 23, min: 59 } },
 ];
 
 class SchedulerForm {
