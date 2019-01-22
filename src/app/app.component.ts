@@ -16,16 +16,16 @@ import {
 import { FullCalendar } from 'primeng/fullcalendar';
 
 const DAYS_OPTIONS: any[] = [
-  { label: 'Sunday', value: 0 },
-  { label: 'Monday', value: 1 },
-  { label: 'Tuesday', value: 2 },
-  { label: 'Wendesday', value: 3 },
-  { label: 'Thursday', value: 4 },
-  { label: 'Friday', value: 5 },
-  { label: 'Saturday', value: 6 },
-  { label: 'Satu', value: 6 },
-  { label: 'Saturday', value: 6 },
-  { label: 'Saturday', value: 6 },
+  { label: 'EveryDay', value: [0, 1, 2, 3, 4, 5, 6] },
+  { label: 'Weekdays', value: [1, 2, 3, 4, 5] },
+  { label: 'Weekends', value: [0, 6] },
+  { label: 'Sunday', value: [0] },
+  { label: 'Monday', value: [1] },
+  { label: 'Tuesday', value: [2] },
+  { label: 'Wendesday', value: [3] },
+  { label: 'Thursday', value: [4] },
+  { label: 'Friday', value: [5] },
+  { label: 'Saturday', value: [6] },
 ];
 
 const TIME_OPTIONS: any[] = [
@@ -63,7 +63,6 @@ class SchedulerForm {
     this.endTime = new FormControl('', [Validators.required]);
   }
 }
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -73,6 +72,7 @@ class SchedulerForm {
 export class AppComponent implements OnInit, AfterViewInit {
 
   @Input() serviceDetailId: number = null;
+  @ViewChild('calendar') calendarRef: FullCalendar;
 
   public daysDialogOptions: any[] = DAYS_OPTIONS;
   public timeDialogOptions: any[] = TIME_OPTIONS;
@@ -108,65 +108,28 @@ export class AppComponent implements OnInit, AfterViewInit {
         const startDate = new Date(res.start);
         const endDate = new Date(res.end);
 
-        // this._addNewEvent(startDate, endDate);
-
-        const distanceBetween = ((startDate.getDay() - endDate.getDay()) * -1) + 1;
-
-        const day = startDate;
-        let dayTopTime = new Date(startDate);
-        dayTopTime.setHours(24);
-
-        const nextDay = new Date();
-
-        if (distanceBetween === 1) {
-          // Same days selected
-          this._addNewEvent(startDate, endDate);
-        } else {
-          // Different days selected
-          console.log(distanceBetween);
-
-          for (let i = 0; i < distanceBetween; i++) {
-
-            // this._addNewEvent(startDate, k)
-
-            // if (endDate.getDate() <= day.getDate()) {
-            //   console.log(day);
-            // }
-
-            // nextDay.setDate(day.getDate() + 1);
-
-            day.setDate(startDate.getDate() + i);
-            dayTopTime = new Date(day);
-            dayTopTime.setHours(24);
-
-            console.log(day);
-            console.log(dayTopTime);
-          }
-        }
-
-
-
+        this._addNewDayEventsByDrag(startDate, endDate);
         this._setDaysSelected(startDate, endDate);
+
+        console.log(this.getRangesArray());
       }
     };
   }
-
-  @ViewChild('calendar') calendarRef: FullCalendar;
 
   ngOnInit(): void {
     this.form = this._formBuilder.group(this._dayTimeForm);
   }
 
-
   ngAfterViewInit(): void {
     // console.log(this.calendarRef.getCalendar());
   }
 
-  public addNewDayEvents() {
-
-    const daysArray = this.form.get('days').value;
+  public addNewDayEventsByForm(): void {
+    const selectedDaysOptions = this.form.get('days').value;
     const selectedStartTime = this.form.get('startTime').value;
     const selectedEndTime = this.form.get('endTime').value;
+
+    const daysArray: any[] = selectedDaysOptions.reduce((acc, curr) => [...acc, ...curr]).sort();
 
     daysArray.forEach((day: number) => {
       const startTime = new Date();
@@ -181,14 +144,78 @@ export class AppComponent implements OnInit, AfterViewInit {
       endTime.setHours(selectedEndTime.value.hours);
       endTime.setMinutes(selectedEndTime.value.min);
 
-      // Update Scheduler and control field
+      // Update Scheduler and control fields
       this._addNewEvent(startTime, endTime);
       this.selectedDays[day] = true;
     });
-
-    this.getRangesArray(this.events);
-
     this.form.reset();
+  }
+
+  public getRangesArray(): any {
+
+    const scheduler: any = Object.assign({}, this.selectedDays);
+    Object.keys(scheduler).forEach((key) => {
+      scheduler[key] = [];
+    });
+
+    const rangesArray = this.events.map((event: any) => {
+      return { lovDayOfWeekID: event.start.getDay(), lowValue: event.start, highValue: event.end };
+    });
+
+    // TODO. fix it to BE Model
+    rangesArray.forEach((item) => {
+      scheduler[item.lovDayOfWeekID].push({
+        lowValue: `${item.lowValue.getHours()}${item.lowValue.getMinutes()}`,
+        highValue: `${item.highValue.getHours()}${item.highValue.getMinutes()}`,
+      });
+    });
+
+    return scheduler;
+  }
+
+  private _addNewEvent(start: Date, end: Date): void {
+    this.events = [...this.events, {
+      'title': '',
+      'start': start,
+      'end': end
+    }];
+  }
+
+  private _addNewDayEventsByDrag(startDragDate: Date, endDragDate: Date): void {
+    const distanceBetween = ((startDragDate.getDay() - endDragDate.getDay()) * -1);
+
+    if (distanceBetween === 0) {
+      // Same days selected
+      this._addNewEvent(startDragDate, endDragDate);
+    } else {
+      // Different days selected
+
+      let day = new Date(startDragDate);
+      let dayTopTime = new Date(startDragDate);
+      dayTopTime.setHours(23);
+      dayTopTime.setMinutes(59);
+      this._addNewEvent(startDragDate, dayTopTime);
+
+      for (let i = 1; i < distanceBetween; i++) {
+
+        const start = new Date(startDragDate);
+        start.setDate(day.getDate() + i);
+        const end = new Date(start);
+
+        start.setHours(0);
+        start.setMinutes(0);
+        end.setHours(23);
+        end.setMinutes(59);
+
+        this._addNewEvent(start, end);
+      }
+
+      day = new Date(endDragDate);
+      dayTopTime = new Date(endDragDate);
+      day.setHours(0);
+      day.setMinutes(0);
+      this._addNewEvent(day, dayTopTime);
+    }
   }
 
   private _getEquivalentSchedulerDate(dateRef: Date, day: number): any {
@@ -197,41 +224,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     return new Date().getDate() + distance;
   }
 
-  private _setDaysSelected(startDate: Date, endDate: Date) {
+  private _setDaysSelected(startDate: Date, endDate: Date): void {
     if ((startDate.getDay() >= 0 && startDate.getDay() <= 6) && (endDate.getDay() >= 0 && endDate.getDay() <= 6)) {
       for (let index = startDate.getDay(); index <= endDate.getDay(); index++) {
         this.selectedDays[index] = true;
       }
     }
   }
-
-  private _addNewEvent(start: Date, end: Date) {
-    this.events = [...this.events, {
-      'title': '',
-      'start': start,
-      'end': end
-    }];
-  }
-
-  public getRangesArray(events: any[]): any {
-    // TODO. fix it to BE Model
-    const scheduler: any = Object.assign({}, this.selectedDays);
-    Object.keys(scheduler).forEach((key) => {
-      scheduler[key] = [];
-    });
-
-    const rangesArray = events.map((event: any) => {
-      return { lovDayOfWeekID: event.start.getDay(), lowValue: event.start, highValue: event.end };
-    });
-
-    rangesArray.forEach((item) => {
-      scheduler[item.lovDayOfWeekID].push({
-        lowValue: item.lowValue,
-        highValue: item.highValue
-      });
-    });
-
-    return scheduler;
-  }
-
 }

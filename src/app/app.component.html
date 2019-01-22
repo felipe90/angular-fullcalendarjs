@@ -1,14 +1,14 @@
-{{selectedDays | json}}
-<!-- {{this.form.controls['days'].value | json}}
-{{this.form.controls['startTime'].value | json}}
+<!-- {{selectedDays | json}} -->
+{{this.form.controls['days'].value | json}}
+<!-- {{this.form.controls['startTime'].value | json}}
 {{this.form.controls['endTime'] |.value json}} -->
 
 <div class="scheduler-content">
-    <form class="scheduler-inputs" [formGroup]="form" (ngSubmit)="addNewDayEvents()">
+    <form class="scheduler-inputs" [formGroup]="form" (ngSubmit)="addNewDayEventsByForm()">
         <!--Days-->
         <div class="form-group-inline">
             <div class="label" for="days">Days</div>
-            <p-multiSelect [options]="daysDialogOptions" [showHeader]="false" defaultLabel=" " [scrollHeight]="'123px'"
+            <p-multiSelect [options]="daysDialogOptions" [showHeader]="false" defaultLabel=" "
                 id="days" formControlName="days"></p-multiSelect>
         </div>
         <!--Start Time-->
@@ -40,7 +40,7 @@
         <!--Actions-->
         <div class="form-group-inline">
             <!-- <i class="fas fa-plus accent action"></i> -->
-            <button pButton type="submit" class="primary" label="New Day-Time(s)" id="submit" ></button>
+            <button pButton type="submit" class="primary" label="New Day-Time(s)" id="submit" [disabled]="this.form.invalid"></button>
         </div>
     </form>
     <hr class="separator">
