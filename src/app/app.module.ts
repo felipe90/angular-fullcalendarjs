@@ -4,9 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FullCalendarModule } from 'primeng/fullcalendar';
+import { FullCalendarModule } from 'ng-fullcalendar';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { NgModule } from '@angular/core';
+// TODO: Change it when update to Primeng 7.x.x
+// import { FullCalendarModule } from 'primeng/fullcalendar';
 
 @NgModule({
   declarations: [

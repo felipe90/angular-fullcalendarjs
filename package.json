@@ -24,8 +24,9 @@
     "bootstrap": "^4.2.1",
     "core-js": "^2.5.4",
     "fullcalendar": "^4.0.0-alpha.2",
+    "ng-fullcalendar": "^1.7.1",
     "primeicons": "^1.0.0",
-    "primeng": "^7.0.4",
+    "primeng": "^6.1.7",
     "rxjs": "^6.0.0",
     "zone.js": "~0.8.26"
   },
@@ -46,7 +47,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.0",
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
-    "protractor": "~5.3.0",
+    "protractor": "^5.4.2",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
     "typescript": "~2.7.2"

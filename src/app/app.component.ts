@@ -13,7 +13,6 @@ import {
   FormGroup,
   Validators
   } from '@angular/forms';
-import { FullCalendar } from 'primeng/fullcalendar';
 
 const DAYS_OPTIONS: any[] = [
   { label: 'EveryDay', value: [0, 1, 2, 3, 4, 5, 6] },
@@ -95,10 +94,9 @@ class SchedulerForm {
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
 
   @Input() serviceDetailId: number = null;
-  @ViewChild('calendar') calendarRef: FullCalendar;
 
   public daysDialogOptions: any[] = DAYS_OPTIONS;
   public timeDialogOptions: any[] = TIME_OPTIONS;
@@ -113,6 +111,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private _formBuilder: FormBuilder
   ) {
+
+  }
+
+  ngOnInit(): void {
+
+    this.form = this._formBuilder.group(this._dayTimeForm);
     this.events = [];
 
     this.options = {
@@ -136,17 +140,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         this._addNewDayEventsByDrag(startDate, endDate);
         this._setDaysSelected(startDate, endDate);
-
-        console.log(this.getRangesArray());
       }
     };
   }
-
-  ngOnInit(): void {
-    this.form = this._formBuilder.group(this._dayTimeForm);
-  }
-
-  ngAfterViewInit(): void { }
 
   public addNewDayEventsByForm(): void {
     const selectedDaysOptions = this.form.get('days').value;
@@ -176,7 +172,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public getRangesArray(): any {
-
     const scheduler: any = Object.assign({}, this.selectedDays);
     Object.keys(scheduler).forEach((key) => {
       scheduler[key] = [];
@@ -195,6 +190,19 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     return scheduler;
+  }
+
+  public eventClick(res: any) {
+    const startDate = new Date(res.start);
+    const endDate = new Date(res.end);
+
+    // this._addNewDayEventsByDrag(startDate, endDate);
+    // this.events.push( {
+    //   'title': '',
+    //   'start': startDate,
+    //   'end': endDate
+    // });
+    this._setDaysSelected(startDate, endDate);
   }
 
   private _addNewEvent(start: Date, end: Date): void {

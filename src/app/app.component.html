@@ -3,8 +3,8 @@
         <!--Days-->
         <div class="form-group-inline">
             <div class="label" for="days">Days</div>
-            <p-multiSelect [options]="daysDialogOptions" [showHeader]="false" defaultLabel=" "
-                id="days" formControlName="days"></p-multiSelect>
+            <p-multiSelect [options]="daysDialogOptions" [showHeader]="false" defaultLabel=" " id="days"
+                formControlName="days"></p-multiSelect>
         </div>
         <!--Start Time-->
         <div class="form-group-inline">
@@ -40,6 +40,13 @@
     </form>
     <hr class="separator">
     <div class="scheduler-caledar">
-        <p-fullCalendar #calendar [events]="events" [options]="options"></p-fullCalendar>
+
+        <div *ngIf="options">
+            <ng-fullcalendar [options]="options" [(eventsModel)]="events" (select)="eventClick($event.detail)"></ng-fullcalendar>
+            <!-- <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)"
+                (eventDrop)="updateEvent($event.detail)" (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)"></ng-fullcalendar> -->
+        </div>
+        <!-- TODO: Change it when update to Primeng 7.x.x -->
+        <!-- <p-fullCalendar #calendar [events]="events" [options]="options"></p-fullCalendar> -->
     </div>
 </div>
