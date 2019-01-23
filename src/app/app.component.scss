@@ -1,0 +1,61 @@
+::ng-deep {
+    .ui-state-disabled,
+    .ui-widget:disabled,
+    *[disabled] {
+        cursor: not-allowed;
+    }
+}
+
+.scheduler-content {
+    background-color: #394664;
+}
+
+// TODO: Change it when update to Primeng 7.x.x and delete ng-calendar dependency
+p-fullCalendar.fc ::ng-deep .fc-view-container,
+ng-fullcalendar.fc ::ng-deep .fc-view-container {
+    .fc-head {
+        th {
+            border: 1px solid transparent;
+            font-size: 10px;
+            color: #ffffff;
+            background-color: #394664;
+            text-align: left;
+        }
+        td.fc-head-container {
+            border: 1px solid transparent;
+        }
+    }
+    .fc-body {
+        .fc-bg {
+            background-color: #aab5c7;
+        }
+        td.fc-today {
+            background-color: transparent;
+        }
+        .fc-event {
+            background-color: #c9d7f4;
+            border: 1px solid #c9d7f4;
+        }
+        .fc-axis {
+            font-size: 9px;
+            color: #ffffff;
+            background-color: #394664;
+            border-bottom: 3px solid #c9d7f4;
+        }
+        .fc-time-grid-event .fc-time {
+            color: #394664;
+        }
+        .fc-divider,
+        .fc-list-heading td,
+        .fc-list-view,
+        .fc-popover,
+        .fc-row,
+        tbody,
+        td,
+        th,
+        tr,
+        thead {
+            border: 3px solid #394664;
+        }
+    }
+}

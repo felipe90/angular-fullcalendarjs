@@ -91,7 +91,7 @@ class SchedulerForm {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 
 export class AppComponent implements OnInit {
@@ -112,11 +112,6 @@ export class AppComponent implements OnInit {
     private _formBuilder: FormBuilder
   ) {
 
-  }
-
-  ngOnInit(): void {
-
-    this.form = this._formBuilder.group(this._dayTimeForm);
     this.events = [];
 
     this.options = {
@@ -128,20 +123,24 @@ export class AppComponent implements OnInit {
       selectable: true,
       slotEventOverlap: false,
       eventOverlap: false,
-      editable: true,
       showCurrentDate: false,
-      columnHeaderFormat: {
-        weekday: 'long',
-      },
+      columnHeaderFormat: { weekday: 'long' },
       nowIndicator: false,
+      editable: false,
+      events: [],
       select: (res: any) => {
         const startDate = new Date(res.start);
         const endDate = new Date(res.end);
 
         this._addNewDayEventsByDrag(startDate, endDate);
         this._setDaysSelected(startDate, endDate);
-      }
+      },
     };
+
+  }
+  ngOnInit(): void {
+    this.form = this._formBuilder.group(this._dayTimeForm);
+
   }
 
   public addNewDayEventsByForm(): void {
@@ -192,17 +191,8 @@ export class AppComponent implements OnInit {
     return scheduler;
   }
 
-  public eventClick(res: any) {
-    const startDate = new Date(res.start);
-    const endDate = new Date(res.end);
-
-    // this._addNewDayEventsByDrag(startDate, endDate);
-    // this.events.push( {
-    //   'title': '',
-    //   'start': startDate,
-    //   'end': endDate
-    // });
-    this._setDaysSelected(startDate, endDate);
+  public onSelectRange(res: any) {
+    this._addNewDayEventsByDrag(res.start, res.end);
   }
 
   private _addNewEvent(start: Date, end: Date): void {
@@ -213,15 +203,17 @@ export class AppComponent implements OnInit {
     }];
   }
 
-  private _addNewDayEventsByDrag(startDragDate: Date, endDragDate: Date): void {
-    const distanceBetween = ((startDragDate.getDay() - endDragDate.getDay()) * -1);
+  private _addNewDayEventsByDrag(startDragDate: any, endDragDate: any): void {
+    const startDate = new Date(startDragDate);
+    const endDate = new Date(endDragDate);
+
+    const distanceBetween = ((startDate.getDay() - endDate.getDay()) * -1);
 
     if (distanceBetween === 0) {
       // Same days selected
       this._addNewEvent(startDragDate, endDragDate);
     } else {
       // Different days selected
-
       let day = new Date(startDragDate);
       let dayTopTime = new Date(startDragDate);
       dayTopTime.setHours(23);
@@ -229,25 +221,26 @@ export class AppComponent implements OnInit {
       this._addNewEvent(startDragDate, dayTopTime);
 
       for (let i = 1; i < distanceBetween; i++) {
-
         const start = new Date(startDragDate);
         start.setDate(day.getDate() + i);
         const end = new Date(start);
-
         start.setHours(0);
         start.setMinutes(0);
         end.setHours(23);
         end.setMinutes(59);
-
         this._addNewEvent(start, end);
       }
-
       day = new Date(endDragDate);
       dayTopTime = new Date(endDragDate);
       day.setHours(0);
       day.setMinutes(0);
-      this._addNewEvent(day, dayTopTime);
+
+      // TODO: Change it when update to Primeng 7.x.x and delete ng-calendar dependency
+      // this._addNewEvent(day, dayTopTime);
+      this._addNewEvent(day, endDragDate);
     }
+
+    this._setDaysSelected(startDate, endDate);
   }
 
   private _getEquivalentSchedulerDate(dateRef: Date, day: number): any {

@@ -40,13 +40,10 @@
     </form>
     <hr class="separator">
     <div class="scheduler-caledar">
-
         <div *ngIf="options">
-            <ng-fullcalendar [options]="options" [(eventsModel)]="events" (select)="eventClick($event.detail)"></ng-fullcalendar>
-            <!-- <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)"
-                (eventDrop)="updateEvent($event.detail)" (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)"></ng-fullcalendar> -->
+            <ng-fullcalendar [options]="options" [(eventsModel)]="events" (select)="onSelectRange($event.detail)"></ng-fullcalendar>
+            <!-- TODO: Change it when update to Primeng 7.x.x and delete ng-calendar dependency -->
+            <!-- <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar> -->
         </div>
-        <!-- TODO: Change it when update to Primeng 7.x.x -->
-        <!-- <p-fullCalendar #calendar [events]="events" [options]="options"></p-fullCalendar> -->
     </div>
 </div>
